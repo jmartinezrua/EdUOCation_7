@@ -3,10 +3,10 @@ package edu.uoc.eduocation.model;
 import java.time.LocalDate;
 
 public class Student {
-    private String nif;
-    private String name;
-    private String surname;
-    private LocalDate birthdate;
+    private final String nif;
+    private final String name;
+    private final String surname;
+    private final LocalDate birthdate;
 
     public Student(String nif, String name, String surname, LocalDate birthdate) {
         this.nif = nif;

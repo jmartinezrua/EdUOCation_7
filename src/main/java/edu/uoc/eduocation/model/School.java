@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class School {
-    private String name;
-    private List<Location> locations;
-    private List<Group> groups;
+    private final String name;
+    private final List<Location> locations;
+    private final List<Group> groups;
 
     public School(String name) {
         this.name = name;

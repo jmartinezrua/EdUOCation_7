@@ -1,8 +1,8 @@
 package edu.uoc.eduocation.model;
 
 public class CourseWithPracticeGroup extends Course {
-    private String practiceType;
-    private int groupSize;
+    private final String practiceType;
+    private final int groupSize;
 
     public CourseWithPracticeGroup(String type, String name, String code, int credits, int hours, String teacherNif, String practiceType, int groupSize) {
         super(type, name, code, credits, hours, teacherNif);

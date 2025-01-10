@@ -8,6 +8,14 @@
 
 .bg-credits {
     -fx-background-image: url('../images/credits.jpg'); -fx-background-size: cover; -fx-background-position: center;
+    -fx-background-color: #f0f0f0; /* Cambiar */
+}
+
+.credits-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000078;
+    /* Add other styles as needed */
 }
 
 .btn {

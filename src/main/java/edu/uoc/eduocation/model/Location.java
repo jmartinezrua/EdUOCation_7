@@ -1,10 +1,10 @@
 package edu.uoc.eduocation.model;
 
 public class Location {
-    private String address;
-    private String city;
-    private String country;
-    private String phone;
+    private final String address;
+    private final String city;
+    private final String country;
+    private final String phone;
 
     public Location(String address, String city, String country, String phone) {
         this.address = address;

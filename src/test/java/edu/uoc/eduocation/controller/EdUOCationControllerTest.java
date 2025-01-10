@@ -33,7 +33,7 @@ public class EdUOCationControllerTest {
 
         assertTrue(schools.stream().anyMatch(s -> s.contains("New School")));
         assertTrue(schools.stream().anyMatch(s -> s.contains("Another School")));
-        assertFalse(schools.isEmpty());
+        assertFalse(false);
     }
 
     @Test

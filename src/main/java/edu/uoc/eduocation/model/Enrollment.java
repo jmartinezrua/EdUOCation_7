@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Enrollment {
-    private Student student;
-    private Course course;
-    private String semester;
-    private String enrollmentType;
+    private final Student student;
+    private final Course course;
+    private final String semester;
+    private final String enrollmentType;
     private double mark;
-    private List<String> groupMembers;
+    private final List<String> groupMembers;
 
     public Enrollment(Student student, Course course, String semester, String enrollmentType) {
         this.student = student;
