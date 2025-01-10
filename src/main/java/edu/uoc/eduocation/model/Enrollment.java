@@ -1,15 +1,18 @@
 package edu.uoc.eduocation.model;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 import java.util.ArrayList;
 
 public class Enrollment {
-    private Student student;
-    private Course course;
-    private String semester;
-    private String enrollmentType;
+    private final Student student;
+    private final Course course;
+    private final String semester;
+    private final String enrollmentType;
     private double mark;
-    private List<String> groupMembers;
+    private final List<String> groupMembers;
+    private String status;
 
     public Enrollment(Student student, Course course, String semester, String enrollmentType) {
         this.student = student;
@@ -18,6 +21,7 @@ public class Enrollment {
         this.enrollmentType = enrollmentType;
         this.mark = 0.0;
         this.groupMembers = new ArrayList<>();
+
     }
 
     public void addGroupMember(String nif) {
@@ -50,5 +54,11 @@ public class Enrollment {
 
     public List<String> getGroupMembers() {
         return groupMembers;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

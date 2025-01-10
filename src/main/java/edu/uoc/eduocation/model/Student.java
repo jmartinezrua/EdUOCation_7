@@ -1,12 +1,15 @@
 package edu.uoc.eduocation.model;
 
+import com.google.gson.Gson;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Student {
-    private String nif;
-    private String name;
-    private String surname;
-    private LocalDate birthdate;
+    private final String nif;
+    private final String name;
+    private final String surname;
+    private final LocalDate birthdate;
 
     public Student(String nif, String name, String surname, LocalDate birthdate) {
         this.nif = nif;
@@ -29,5 +32,17 @@ public class Student {
 
     public LocalDate getBirthdate() {
         return birthdate;
+    }
+
+    @Override
+    public String toString() {
+        Map<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("nif", nif);
+        jsonMap.put("name", name);
+        jsonMap.put("surname", surname);
+        jsonMap.put("birthdate", birthdate.toString());
+
+        Gson gson = new Gson();
+        return gson.toJson(jsonMap);
     }
 }

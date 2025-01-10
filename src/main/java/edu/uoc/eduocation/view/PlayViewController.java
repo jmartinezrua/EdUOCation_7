@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,14 +80,14 @@ public class PlayViewController {
                 students,
                 selection -> {
                     selectedStudent = selection.getFirst();
-                    loadEnrollments(selectedSchool, selectedGroup, selectedStudent);
+                    loadEnrollments(selectedStudent);
                 }
         );
     }
 
-    private void loadEnrollments(String schoolName, String groupName, String studentNif) {
+    private void loadEnrollments(String studentNif) {
         currentLevel = "enrollments";
-        List<String> enrollments = controller.getEnrollments(schoolName, groupName, studentNif);
+        List<String> enrollments = controller.getEnrollments(studentNif);
 
         setupTable(
                 List.of("Course", "Semester", "Status", "Mark"), // Column headers
@@ -97,20 +96,21 @@ public class PlayViewController {
                 null
         );
 
-        TableColumn<List<String>, String> gradeColumn = (TableColumn<List<String>, String>) mainTableView.getColumns().get(3);
-        gradeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        gradeColumn.setOnEditCommit(event -> {
-            List<String> row = event.getRowValue();
-            String newGrade = event.getNewValue();
-            row.set(3, event.getNewValue());
-
-            updateGradeInController(row, newGrade);
-        });
+        TableColumn<List<String>, String> column = createTableColumn();
 
         mainTableView.setEditable(true);
         mainTableView.getSelectionModel().setCellSelectionEnabled(false);
         mainTableView.getSelectionModel().clearSelection();
         mainTableView.setOnMouseClicked(null);
+    }
+
+    private TableColumn<List<String>, String> createTableColumn() {
+        TableColumn<List<String>, String> column = new TableColumn<>("Column Name");
+        column.setCellValueFactory(cellData -> {
+            List<String> row = cellData.getValue();
+            return new SimpleStringProperty(row.getFirst());
+        });
+        return column;
     }
 
     private void updateGradeInController(List<String> row, String newGrade) {
@@ -130,7 +130,7 @@ public class PlayViewController {
 
         try {
             // Call the controller to update the grade
-            boolean success = controller.updateEnrollmentMark(course, semester, status, selectedStudent, mark);
+            boolean success = controller.updateEnrollmentMark(course, semester, selectedStudent, mark);
 
             if (success) {
                 System.out.println("Grade updated successfully for course: " + course + " and student: " + selectedStudent);
@@ -160,7 +160,9 @@ public class PlayViewController {
 
     private void setupTable(List<String> headers, List<String> keys, List<String> data, TableRowClickListener listener) {
         mainTableView.getColumns().clear();
-
+        System.out.println("Headers: " + headers);
+        System.out.println("Keys: " + keys);
+        System.out.println("Data: " + data);
         // Crear columnas dinámicamente
         for (int i = 0; i < headers.size(); i++) {
             int columnIndex = i;
@@ -184,13 +186,11 @@ public class PlayViewController {
         mainTableView.setItems(FXCollections.observableArrayList(rows));
         mainTableView.setVisible(true);
 
-        if (listener != null) {
-            mainTableView.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && mainTableView.getSelectionModel().getSelectedItem() != null) {
-                    listener.onRowClick(mainTableView.getSelectionModel().getSelectedItem());
-                }
-            });
-        }
+        if (listener != null) mainTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && mainTableView.getSelectionModel().getSelectedItem() != null) {
+                listener.onRowClick(mainTableView.getSelectionModel().getSelectedItem());
+            }
+        });
     }
 
     private List<String> parseJsonToList(String json, List<String> keys) {
@@ -201,8 +201,11 @@ public class PlayViewController {
         for (String key : keys) {
             Object value = map.get(key);
             if (value == null && map.containsKey("details")) {
-                Map<String, Object> detailsMap = (Map<String, Object>) map.get("details");
-                value = detailsMap != null ? detailsMap.get(key) : null;
+                Object detailsObject = map.get("details");
+                if (detailsObject instanceof Map) {
+                    Map<String, Object> detailsMap = (Map<String, Object>) detailsObject;
+                    value = detailsMap.get(key);
+                }
             }
 
             if ("mark".equals(key)) {
@@ -226,18 +229,17 @@ public class PlayViewController {
         return values;
     }
 
+
+
     @FXML
     private void setupBackButton() {
         backButton.setOnAction(e -> {
             try {
-                if ("groups".equals(currentLevel)) {
-                    loadSchools();
-                } else if ("students".equals(currentLevel)) {
-                    loadGroups(selectedSchool);
-                } else if ("enrollments".equals(currentLevel)) {
-                    loadStudents(selectedSchool, selectedGroup);
-                } else {
-                    EdUOCation.main.goScene("main");
+                switch (currentLevel) {
+                    case "groups" -> loadSchools();
+                    case "students" -> loadGroups(selectedSchool);
+                    case "enrollments" -> loadStudents(selectedSchool, selectedGroup);
+                    case null, default -> EdUOCation.main.goScene("main");
                 }
             } catch (IOException ex) {
                 System.exit(1);

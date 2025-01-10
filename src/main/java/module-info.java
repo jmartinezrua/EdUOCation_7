@@ -5,5 +5,6 @@ open module edu.uoc.eduocation{
     requires  javafx.controls;
     requires  javafx.fxml;
     requires com.google.gson;
+    requires java.logging;
     exports edu.uoc.eduocation.view;
 }

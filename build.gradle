@@ -35,7 +35,7 @@ dependencies {
 javadoc{
     options.memberLevel = JavadocMemberLevel.PRIVATE
     options.encoding = "UTF-8"
-    options.author = true
+    //options.author = true
     destinationDir = file("docs")
 }
 

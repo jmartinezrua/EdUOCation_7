@@ -114,13 +114,13 @@ public class EdUOCationController {
                     case "CourseWithExam" -> {
                         String[] additionalInfo = parts[6].split(",");
                         LocalDateTime examDate = LocalDateTime.parse(additionalInfo[0].trim(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                        String location = additionalInfo[1].trim();
+                        String location = additionalInfo[1].trim(); // additionalInfo.split(",");
                         course = new CourseWithExam(type, name, code, credits, hours, teacherNif, examDate, location);
                     }
                     case "CourseWithPracticeGroup" -> {
                         String[] additionalInfo = parts[6].split(",");
                         String practiceType = additionalInfo[0].trim();
-                        int groupSize = Integer.parseInt(additionalInfo[1].trim());
+                        int groupSize = Integer.parseInt(additionalInfo[1].trim()); //additionalInfo.split(",");
                         course = new CourseWithPracticeGroup(type, name, code, credits, hours, teacherNif, practiceType, groupSize);
                     }
                     case "CourseWithPracticeIndividual" -> {
@@ -372,7 +372,8 @@ public class EdUOCationController {
         Enrollment enrollment = new Enrollment(student, course, semester, enrollmentType);
 
         if (enrollmentType.equals("MULTIPLE")) {
-            String[] groupMembers = additionalInfo.split(",");
+            String[] groupMembers = additionalInfo.split(","); //21098765I|BIO202|2023A|MULTIPLE|10987654J,43210987G,90876543K
+
             for (String groupMember : groupMembers) {
                 enrollment.addGroupMember(groupMember.trim());
             }

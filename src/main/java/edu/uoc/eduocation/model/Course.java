@@ -1,17 +1,13 @@
 package edu.uoc.eduocation.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 // Base Class for Courses
 public abstract class Course {
-    private String type;
-    private String name;
-    private String code;
-    private int credits;
-    private int hours;
-    private String teacherNif;
+    private final String type;
+    private final String name;
+    private final String code;
+    private final int credits;
+    private final int hours;
+    private final String teacherNif;
 
     public Course(String type, String name, String code, int credits, int hours, String teacherNif) {
         this.type = type;
